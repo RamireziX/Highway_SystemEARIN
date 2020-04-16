@@ -14,6 +14,7 @@ def randomCityGenerator():             # creates 5 random (x,y) coordinates and 
         print ('\n')
     print(randomXlist)
     print(randomYlist)
+    return[randomXlist,randomYlist]
 
 def calculateDistance(x1, y1, x2, y2):     #calculates distance between two given (x,y) coordinates
     dist = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
@@ -22,5 +23,5 @@ def calculateDistance(x1, y1, x2, y2):     #calculates distance between two give
 
 #def main():
 randomCityGenerator()
-
-
+list = randomCityGenerator()
+print(list)
