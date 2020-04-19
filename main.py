@@ -5,8 +5,9 @@ def randomCityGenerator():             # creates 5 random (x,y) coordinates and 
     randomXlist = []                   # with x coordinate and one with y coordinates
     randomYlist = []
     print('Random coordinates for all cities:')
-    for i in range (1, 6):
-        xi = random.randrange(1, 250)
+    random.seed(0)                      # THIS WILL STOP RANDOM EXECUTION EACH TIME AND SAVE ONE STATE,
+    for i in range (1, 6):              # FOR THE PURPOSE OF TESTING, Remove to make program use different
+        xi = random.randrange(1, 250)   # numbers each time
         randomXlist.append(xi)
         yi = random.randrange(1, 250)
         randomYlist.append(yi)
