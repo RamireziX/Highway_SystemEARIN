@@ -98,3 +98,19 @@ class Graph:
         else:
             return node.index
 
+
+def addWeights(path_costs, listOfCities):
+    listOfNodes = []
+    noOfCities = len(listOfCities)
+    for i in range(0, noOfCities):
+        node = Node(i + 1)
+        listOfNodes.append(node)
+
+    w_graph = Graph.create_from_nodes(listOfNodes)
+    k = 0
+    for i in range(0, noOfCities):
+        for j in range(i + 1, noOfCities):
+            w_graph.connect(listOfNodes[i], listOfNodes[j], path_costs[k])
+            k = k + 1
+
+    return w_graph
