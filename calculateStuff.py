@@ -34,7 +34,7 @@ def calculateRoadsDistance(listOfCities):
     noOfCities = len(listOfCities)
     listOfPaths = []
     for i in range(0, noOfCities):
-        for j in range(i+1, noOfCities):
+        for j in range(i + 1, noOfCities):
             path = calculateDistance(listOfCities[i].x, listOfCities[i].y,
                                      listOfCities[j].x, listOfCities[j].y)
             listOfPaths.append(path)
@@ -42,8 +42,16 @@ def calculateRoadsDistance(listOfCities):
     return listOfPaths
 
 
-def calcHeuristicFunction(w1, w2, totalLength, averageLength):
-    heuristic = w1 * totalLength + w2 * averageLength
+def calcHeuristicFunction(w1, w2, w_graph, noOfCities):  # noOfCities mozna wczesniej policzyc i miec jako jakis
+    # global variable czy cos, bo liczba miast sie nie bedzie zmieniac
+    allPaths = []
+    # get all weights from graph
+    for i in range(0, noOfCities):
+        for j in range(i + 1, noOfCities):
+            path = w_graph.get_weight(i, j)
+            allPaths.append(path)
+
+    heuristic = w1 * calcTotalLength(allPaths) + w2 * calcAvgLength(allPaths)
     return heuristic
 
 

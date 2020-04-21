@@ -114,3 +114,26 @@ def addWeights(path_costs, listOfCities):
             k = k + 1
 
     return w_graph
+
+
+# to jakos dziwnie sprawdza, te has_conn.
+# mam wrazenie, ze sprawdza, czy jest bezposrednie polaczenie,
+# a nie czy jest polaczenie rowniez przez inny node
+def checkConnectivity(w_graph, noOfCities):
+    isConnected = True
+    for i in range(0, noOfCities):
+        for j in range(i + 1, noOfCities):
+            isConnected = w_graph.has_conn(i, j)
+
+    return isConnected
+
+
+# jeszcze nie dziala
+def optimiseGraph(w_graph, noOfCities):
+    for i in range(0, noOfCities):
+        for j in range(i + 1, noOfCities):
+            w_graph.remove_conn(i, j)
+            # check, if graph is still connected
+            checkConnectivity(w_graph, noOfCities)
+
+    return w_graph
