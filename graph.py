@@ -1,5 +1,5 @@
 from calculateStuff import *
-
+from copy import copy, deepcopy
 
 class Node:
 
@@ -119,6 +119,12 @@ def addWeights(path_costs, listOfCities):
     return w_graph
 
 
+# tu jest problem, bo lista grafów będzie taka sama, w pythonie sie przekazuje przez adres, nie przez value
+# i nie wiem jak to rozwiązać, heuristic function wybiera rzeczywiście dobrą, tą najmniejszą.
+# trzeba by zrobić jakąs funkcję (to się nazywa factory function) która by stworzyła nowy graf na
+# podstawie starego
+# coś jak w_graph.copyGraph(anotherGraph)
+# EDIT problem rozwiązałem kopiując, wybierając i zwracając samo adj matrix
 def optimiseGraph(w_graph, noOfCities):
     listOfGraphs = []
     listOfHeuristics = []
@@ -132,10 +138,20 @@ def optimiseGraph(w_graph, noOfCities):
                     nonZeroVertices.append(vertice)
             if len(nonZeroVertices) > 1:
                 w_graph.remove_conn(i, j)
-                # w_graph.print_adj_mat()
+                # printami można podejrzeć jaka heurystyka należy do jakiego grafu
+                print('current graph:')
+                w_graph.print_adj_mat()
+                # mało eleganckie ale działa, graf zawsze był taki sam, nieważne
+                # jaki powinien być wynik
+                # (ma związek z tym, że python do obiektów się odnosi przez adres)
+                # a teraz kopiuję po prostu adj matrix i potem wybieram i zwracam najlepszą
+                newAdjMat = deepcopy(w_graph.adj_mat)
                 heuristic = calcHeuristicFunction(1, 1, w_graph, noOfCities)
-                listOfGraphs.append(w_graph)
+                print("and it's heuristic = " + str(heuristic))
+                listOfGraphs.append(newAdjMat)
                 listOfHeuristics.append(heuristic)
+    # get index of smallest value of heuristic, which is shared by best graph
     index_min = min(range(len(listOfHeuristics)), key=listOfHeuristics.__getitem__)
+    print('------------------------RESULT---------------------------')
     print("Best heuristic = " + str(listOfHeuristics[index_min]))
     return listOfGraphs[index_min]

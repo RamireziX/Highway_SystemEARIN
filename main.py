@@ -13,10 +13,8 @@ def main():
 
     best_graph = optimiseGraph(w_graph, noOfCities)
     print('BEST Adjacency matrix representing graph after optimising:')
-    best_graph.print_adj_mat()
-    #
-    # print('NEW Adjacency matrix representing graph:')
-    # w_graph.print_adj_mat()
+    for row in best_graph:
+        print(row)
 
 
 main()
