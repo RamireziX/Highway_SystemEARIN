@@ -132,9 +132,10 @@ def optimiseGraph(w_graph, noOfCities):
                     nonZeroVertices.append(vertice)
             if len(nonZeroVertices) > 1:
                 w_graph.remove_conn(i, j)
-                w_graph.print_adj_mat()
+                # w_graph.print_adj_mat()
                 heuristic = calcHeuristicFunction(1, 1, w_graph, noOfCities)
                 listOfGraphs.append(w_graph)
                 listOfHeuristics.append(heuristic)
-
-    return listOfGraphs, listOfHeuristics  # w sumie nawet nie to zwracac, a najlepszy graf potem ogarne
+    index_min = min(range(len(listOfHeuristics)), key=listOfHeuristics.__getitem__)
+    print("Best heuristic = " + str(listOfHeuristics[index_min]))
+    return listOfGraphs[index_min]
