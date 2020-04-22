@@ -8,8 +8,13 @@ def main():
     path_costs = calculateRoadsDistance(listOfCities)
     w_graph = addWeights(path_costs, listOfCities)
 
-    print('Adjacency matrix representing graph:')
-    w_graph.print_adj_mat()
+    # print('Adjacency matrix representing graph:')
+    # w_graph.print_adj_mat()
+
+    optimiseGraph(w_graph, noOfCities)
+    #
+    # print('NEW Adjacency matrix representing graph:')
+    # w_graph.print_adj_mat()
 
 
 main()

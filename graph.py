@@ -1,3 +1,6 @@
+from calculateStuff import *
+
+
 class Node:
 
     def __init__(self, data, indexloc=None):
@@ -116,24 +119,22 @@ def addWeights(path_costs, listOfCities):
     return w_graph
 
 
-# to jakos dziwnie sprawdza, te has_conn.
-# mam wrazenie, ze sprawdza, czy jest bezposrednie polaczenie,
-# a nie czy jest polaczenie rowniez przez inny node
-def checkConnectivity(w_graph, noOfCities):
-    isConnected = True
-    for i in range(0, noOfCities):
-        for j in range(i + 1, noOfCities):
-            isConnected = w_graph.has_conn(i, j)
-
-    return isConnected
-
-
-# jeszcze nie dziala
 def optimiseGraph(w_graph, noOfCities):
+    listOfGraphs = []
+    listOfHeuristics = []
     for i in range(0, noOfCities):
         for j in range(i + 1, noOfCities):
-            w_graph.remove_conn(i, j)
-            # check, if graph is still connected
-            checkConnectivity(w_graph, noOfCities)
+            # check, if graph is still connected - at least one value in a row is non zero
+            nonZeroVertices = []
+            for k in range(0, noOfCities):
+                vertice = w_graph.adj_mat[i][k]
+                if vertice != 0:
+                    nonZeroVertices.append(vertice)
+            if len(nonZeroVertices) > 1:
+                w_graph.remove_conn(i, j)
+                w_graph.print_adj_mat()
+                heuristic = calcHeuristicFunction(1, 1, w_graph, noOfCities)
+                listOfGraphs.append(w_graph)
+                listOfHeuristics.append(heuristic)
 
-    return w_graph
+    return listOfGraphs, listOfHeuristics  # w sumie nawet nie to zwracac, a najlepszy graf potem ogarne

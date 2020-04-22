@@ -60,6 +60,7 @@ def calcTotalLength(allPaths):
     return totalLength
 
 
+# to nie jest ok
 def calcAvgLength(allPaths):
     avgLength = sum(list(allPaths)) / len(allPaths)
     return avgLength
