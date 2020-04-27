@@ -11,9 +11,10 @@ class City:
         self.y = y
 
 
+# dajmy ograniczenie, że muszą być przynajmniej 3 miasta. Huk, że dla 2 jest to oczywiste
+# ale też 2 miasta wywalają program
 def randomCityGenerator():  # creates 5 cities with random coordinates
     listOfCities = []
-    # print('Random coordinates for all cities:')
     random.seed(0)  # THIS WILL STOP RANDOM EXECUTION EACH TIME AND SAVE ONE STATE,
     for i in range(1, 6):  # FOR THE PURPOSE OF TESTING, Remove to make program use different
         xi = random.randrange(1, 250)  # numbers each time
@@ -26,7 +27,6 @@ def randomCityGenerator():  # creates 5 cities with random coordinates
 
 def calculateDistance(x1, y1, x2, y2):  # calculates distance between two given (x,y) coordinates
     dist = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)  # and returns positive value
-    # print(round(dist, ))
     return round(dist, )
 
 
@@ -42,17 +42,15 @@ def calculateRoadsDistance(listOfCities):
     return listOfPaths
 
 
-def calcHeuristicFunction(w1, w2, w_graph, noOfCities):  # noOfCities mozna wczesniej policzyc
-    # i miec jako jakis
-    # global variable czy cos, bo liczba miast sie nie bedzie zmieniac
+def calcHeuristicFunction(w1, w2, w_graph):
     allPaths = []
     # get all weights from graph
-    for i in range(0, noOfCities):
-        for j in range(i + 1, noOfCities):
+    for i in range(0, len(w_graph.nodes)):
+        for j in range(i + 1, len(w_graph.nodes)):
             path = w_graph.get_weight(i, j)
             allPaths.append(path)
 
-    heuristic = w1 * calcTotalLength(allPaths) + w2 * calcAvgLength(w_graph, noOfCities)
+    heuristic = w1 * calcTotalLength(allPaths) + w2 * calcAvgLength(w_graph)
     return heuristic
 
 
@@ -61,31 +59,22 @@ def calcTotalLength(allPaths):
     return totalLength
 
 
-# to nie jest ok
-# def calcAvgLength(allPaths):
-#     avgLength = sum(list(allPaths)) / len(allPaths)
-#     return avgLength
-
-# to jest ok
-def calcAvgLength(w_graph, noOfCities):
-    # Get index of node (or maintain int passed in)
-    onlyDistances = []
-    for i in range(0, noOfCities):
+# calculate average distance between 2 cities using dijkstra's algo
+def calcAvgLength(w_graph):
+    # list of distances between cities by dijkstra's algo
+    total_distances = []
+    # calculate shortest path to all cities for all cities
+    for i in range(0, len(w_graph.nodes)):
         nodenum = w_graph.get_index_from_node(i)
-
-        # Make an array keeping track of distance from node to any node
+        # Make a list keeping track of distance from node to any node
         # in self.nodes. Initialize to infinity for all nodes but the
         # starting node, keep track of "path" which relates to distance.
-        # Index 0 = distance, index 1 = node hops
         dist = [None] * len(w_graph.nodes)
         for i in range(len(dist)):
-            dist[i] = [float("inf")]
-            dist[i].append([w_graph.nodes[nodenum]])
+            dist[i] = float("inf")
 
-        dist[nodenum][0] = 0
+        dist[nodenum] = 0
         # Queue of all nodes in the graph
-        # Note the integers in the queue correspond to indices of node
-        # locations in the self.nodes array
         queue = [i for i in range(len(w_graph.nodes))]
         # Set of numbers seen so far
         seen = set()
@@ -95,8 +84,8 @@ def calcAvgLength(w_graph, noOfCities):
             min_dist = float("inf")
             min_node = None
             for n in queue:
-                if dist[n][0] < min_dist and n not in seen:
-                    min_dist = dist[n][0]
+                if dist[n] < min_dist and n not in seen:
+                    min_dist = dist[n]
                     min_node = n
 
             # Add min distance node to seen, remove from queue
@@ -106,13 +95,12 @@ def calcAvgLength(w_graph, noOfCities):
             connections = w_graph.connections_from(min_node)
             # For each connection, update its path and total distance from
             # starting node if the total distance is less than the current distance
-            # in dist array
+            # in dist list
             for (node, weight) in connections:
                 tot_dist = weight + min_dist
-                if tot_dist < dist[node.index][0]:
-                    dist[node.index][0] = tot_dist
-                    onlyDistances.append(tot_dist)
-                    dist[node.index][1] = list(dist[min_node][1])
-                    dist[node.index][1].append(node)
-    avgLength = sum(list(onlyDistances)) / len(onlyDistances)
+                if tot_dist < dist[node.index]:
+                    dist[node.index] = tot_dist
+                    total_distances.append(tot_dist)
+
+    avgLength = sum(list(total_distances)) / len(total_distances)
     return avgLength

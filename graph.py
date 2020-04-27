@@ -1,6 +1,7 @@
 from calculateStuff import *
 from copy import copy, deepcopy
 
+
 class Node:
 
     def __init__(self, data, indexloc=None):
@@ -119,37 +120,42 @@ def addWeights(path_costs, listOfCities):
     return w_graph
 
 
-# tu jest problem, bo lista grafów będzie taka sama, w pythonie sie przekazuje przez adres, nie przez value
-# i nie wiem jak to rozwiązać, heuristic function wybiera rzeczywiście dobrą, tą najmniejszą.
-# trzeba by zrobić jakąs funkcję (to się nazywa factory function) która by stworzyła nowy graf na
-# podstawie starego
-# coś jak w_graph.copyGraph(anotherGraph)
-# EDIT problem rozwiązałem kopiując, wybierając i zwracając samo adj matrix
-def optimiseGraph(w_graph, noOfCities):
+# a* algorithm
+def optimiseGraph(w_graph, w1, w2):
     listOfGraphs = []
     listOfHeuristics = []
-    for i in range(0, noOfCities):
-        for j in range(i + 1, noOfCities):
+    for i in range(0, len(w_graph.nodes)):
+        for j in range(i + 1, len(w_graph.nodes)):
             # check, if graph is still connected - at least one value in a row is non zero
             nonZeroVertices = []
-            for k in range(0, noOfCities):
+            for k in range(0, len(w_graph.nodes)):
                 vertice = w_graph.adj_mat[i][k]
                 if vertice != 0:
                     nonZeroVertices.append(vertice)
+            # delete one vertice
             if len(nonZeroVertices) > 1:
+                # to be sure 1st graph with all vertices is included
+                # (can be a result if w1 ~= 0 w2 = 1)
+                if i == 0 and j == 1:
+                    newAdjMat = deepcopy(w_graph.adj_mat)
+                    heuristic = calcHeuristicFunction(w1, w2, w_graph)
+                    # print("and it's heuristic = " + str(heuristic))
+                    listOfGraphs.append(newAdjMat)
+                    listOfHeuristics.append(heuristic)
                 w_graph.remove_conn(i, j)
                 # printami można podejrzeć jaka heurystyka należy do jakiego grafu
-                print('current graph:')
-                w_graph.print_adj_mat()
+                # print('current graph:')
+                # w_graph.print_adj_mat()
                 # mało eleganckie ale działa, graf zawsze był taki sam, nieważne
                 # jaki powinien być wynik
                 # (ma związek z tym, że python do obiektów się odnosi przez adres)
                 # a teraz kopiuję po prostu adj matrix i potem wybieram i zwracam najlepszą
                 newAdjMat = deepcopy(w_graph.adj_mat)
-                heuristic = calcHeuristicFunction(1, 1, w_graph, noOfCities)
-                print("and it's heuristic = " + str(heuristic))
+                heuristic = calcHeuristicFunction(w1, w2, w_graph)
+                # print("and it's heuristic = " + str(heuristic))
                 listOfGraphs.append(newAdjMat)
                 listOfHeuristics.append(heuristic)
+
     # get index of smallest value of heuristic, which is shared by best graph
     index_min = min(range(len(listOfHeuristics)), key=listOfHeuristics.__getitem__)
     print('------------------------RESULT---------------------------')
