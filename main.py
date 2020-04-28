@@ -2,7 +2,7 @@ from graph import *
 
 
 def main():
-    # jakies ograniczenia w w1 i w2 przy wpisywaniu
+   
     print("Write the value of w1 and press enter: ")
     w1 = input()
     print("w1 = " + w1)
