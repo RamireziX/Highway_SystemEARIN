@@ -12,6 +12,11 @@ def main():
     # python reads input as string
     w1 = float(w1)
     w2 = float(w2)
+    
+    if w1 < 0 or w1 > 1 or w2 < 0 or w2 > 1:
+        print("\n ERROR! Invalid value of parameter detected. Please choose values between 0 and 1 for both w1 and w2.")
+        exit()
+        
     listOfCities = randomCityGenerator()
     path_costs = calculateRoadsDistance(listOfCities)
     w_graph = addWeights(path_costs, listOfCities)
