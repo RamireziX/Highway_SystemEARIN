@@ -15,12 +15,36 @@ class City:
 # ale też 2 miasta wywalają program
 def randomCityGenerator():  # creates 5 cities with random coordinates
     listOfCities = []
-    random.seed(0)  # THIS WILL STOP RANDOM EXECUTION EACH TIME AND SAVE ONE STATE,
-    for i in range(1, 6):  # FOR THE PURPOSE OF TESTING, Remove to make program use different
-        xi = random.randrange(1, 250)  # numbers each time
-        yi = random.randrange(1, 250)
-        newCity = City(i, xi, yi)
-        listOfCities.append(newCity)
+
+    print("Input '1' for 5 random cities or '2' for custom coordinates: ")
+    mode = input()
+    mode = int(mode)
+    if mode != 1 and mode != 2:
+        print("\n ERROR! Please choose 1 for random mode and 2 for custom mode.")
+        exit()
+    elif mode==1:
+        random.seed(0)  # THIS WILL STOP RANDOM EXECUTION EACH TIME AND SAVE ONE STATE,
+        for i in range(1, 6):  # FOR THE PURPOSE OF TESTING, Remove to make program use different
+            xi = random.randrange(1, 250)  # numbers each time
+            yi = random.randrange(1, 250)
+            newCity = City(i, xi, yi)
+            listOfCities.append(newCity)
+    elif mode==2:
+        for i in range(1, 6):
+            print("\nPlease choose x{}".format(i), "coordinate:")
+            xi = input()
+            xi = int(xi)
+            if xi < 1 or xi > 250:
+                print("\n ERROR! Please choose x and y values in range 1 to 250.")
+                exit()
+            print("\nPlease choose y{}".format(i), "coordinate:")
+            yi = input()
+            yi = int(yi)
+            if yi < 1 or yi > 250:
+                print("\n ERROR! Please choose x and y values in range 1 to 250.")
+                exit()
+            newCity = City(i, xi, yi)
+            listOfCities.append(newCity)
 
     return listOfCities
 
