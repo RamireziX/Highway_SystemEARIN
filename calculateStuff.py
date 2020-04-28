@@ -10,27 +10,42 @@ class City:
         self.x = x
         self.y = y
 
-
-# dajmy ograniczenie, że muszą być przynajmniej 3 miasta. Huk, że dla 2 jest to oczywiste
-# ale też 2 miasta wywalają program
-def randomCityGenerator():  # creates 5 cities with random coordinates
+        
+def randomCityGenerator():  # creates x cities, asks user for random or manual mode
     listOfCities = []
 
-    print("Input '1' for 5 random cities or '2' for custom coordinates: ")
+    print("Input '1' for randomly generated cities or '2' for custom coordinates: ")
     mode = input()
     mode = int(mode)
     if mode != 1 and mode != 2:
-        print("\n ERROR! Please choose 1 for random mode and 2 for custom mode.")
+        print("\n ERROR! Please choose 1 for random mode and 2 for manual mode.")
         exit()
-    elif mode==1:
-        random.seed(0)  # THIS WILL STOP RANDOM EXECUTION EACH TIME AND SAVE ONE STATE,
-        for i in range(1, 6):  # FOR THE PURPOSE OF TESTING, Remove to make program use different
+
+    elif mode==1:  #RANDOM MODE
+        #random.seed(0)  # THIS WILL STOP RANDOM EXECUTION EACH TIME AND SAVE ONE STATE,
+        print("Choose number of cities (3-50): ")
+        number = input()
+        number = int(number)
+        if number < 3 or number > 50:
+            print("\n ERROR! Number of cities should be in the range 3-50.")
+            exit()
+
+        for i in range(1, number+1):
             xi = random.randrange(1, 250)  # numbers each time
             yi = random.randrange(1, 250)
             newCity = City(i, xi, yi)
             listOfCities.append(newCity)
-    elif mode==2:
-        for i in range(1, 6):
+
+
+    elif mode==2: #MANUAL MODE
+        print("Choose number of cities (3-50): ")
+        number = input()
+        number = int(number)
+        if number < 3 or number > 50:
+            print("\n ERROR! Number of cities should be in the range 3-50.")
+            exit()
+
+        for i in range(1, number+1):
             print("\nPlease choose x{}".format(i), "coordinate:")
             xi = input()
             xi = int(xi)
@@ -45,6 +60,7 @@ def randomCityGenerator():  # creates 5 cities with random coordinates
                 exit()
             newCity = City(i, xi, yi)
             listOfCities.append(newCity)
+
 
     return listOfCities
 
