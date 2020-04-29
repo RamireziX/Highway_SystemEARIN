@@ -1,5 +1,5 @@
 from calculateStuff import *
-from copy import copy, deepcopy
+from copy import deepcopy
 
 
 class Node:
@@ -23,8 +23,7 @@ class Graph:
             self.nodes[i].index = i
 
     # Conncects from node1 to node2
-    # Note row is source, column is destination
-    # Allows weighted edges
+    # row is source, column is destination
     def connect_dir(self, node1, node2, weight=1):
         node1, node2 = self.get_index_from_node(node1), self.get_index_from_node(node2)
         self.adj_mat[node1][node2] = weight
@@ -71,8 +70,7 @@ class Graph:
         node1, node2 = self.get_index_from_node(node1), self.get_index_from_node(node2)
         self.adj_mat[node1][node2] = 0
 
-        # Can go from node 1 to node 2?
-
+    # Can go from node 1 to node 2?
     def can_traverse_dir(self, node1, node2):
         node1, node2 = self.get_index_from_node(node1), self.get_index_from_node(node2)
         return self.adj_mat[node1][node2] != 0
@@ -103,6 +101,7 @@ class Graph:
             return node.index
 
 
+# add weights from calculated road distances
 def addWeights(path_costs, listOfCities):
     listOfNodes = []
     noOfCities = len(listOfCities)
@@ -137,22 +136,15 @@ def optimiseGraph(w_graph, w1, w2):
                 # to be sure 1st graph with all vertices is included
                 # (can be a result if w1 ~= 0 w2 = 1)
                 if i == 0 and j == 1:
+                    # save graph as adj matrix
                     newAdjMat = deepcopy(w_graph.adj_mat)
                     heuristic = calcHeuristicFunction(w1, w2, w_graph)
-                    # print("and it's heuristic = " + str(heuristic))
                     listOfGraphs.append(newAdjMat)
                     listOfHeuristics.append(heuristic)
                 w_graph.remove_conn(i, j)
-                # printami można podejrzeć jaka heurystyka należy do jakiego grafu
-                # print('current graph:')
-                # w_graph.print_adj_mat()
-                # mało eleganckie ale działa, graf zawsze był taki sam, nieważne
-                # jaki powinien być wynik
-                # (ma związek z tym, że python do obiektów się odnosi przez adres)
-                # a teraz kopiuję po prostu adj matrix i potem wybieram i zwracam najlepszą
+                # save graph as adj matrix
                 newAdjMat = deepcopy(w_graph.adj_mat)
                 heuristic = calcHeuristicFunction(w1, w2, w_graph)
-                # print("and it's heuristic = " + str(heuristic))
                 listOfGraphs.append(newAdjMat)
                 listOfHeuristics.append(heuristic)
 
