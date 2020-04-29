@@ -108,35 +108,30 @@ def calcAvgLength(w_graph):
     # calculate shortest path to all cities from all cities
     for i in range(0, len(w_graph.nodes)):
         nodenum = w_graph.get_index_from_node(i)
-        # Make a list keeping track of distance from city to any city
-        # in self.nodes. Initialize to infinity for all city but the starting one
+        # list of distances, all but first are infinite
         dist = [None] * len(w_graph.nodes)
         for i in range(len(dist)):
             dist[i] = float("inf")
 
         dist[nodenum] = 0
-        # Queue of all city in the graph
+        # all cities and cities already seen
         queue = [i for i in range(len(w_graph.nodes))]
-        # Set of cities seen so far
         seen = set()
         while len(queue) > 0:
-            # Get city in queue that has not yet been seen
-            # that has smallest distance to starting node
             min_dist = float("inf")
             min_node = None
             for n in queue:
+                # get city not yet seen, and having smaller distance
                 if dist[n] < min_dist and n not in seen:
                     min_dist = dist[n]
                     min_node = n
 
-            # Add min distance city to seen, remove from queue
+            # add min distance city to seen, remove from queue
             queue.remove(min_node)
             seen.add(min_node)
-            # Get all next hops
+            # next cities to go to
             connections = w_graph.connections_from(min_node)
-            # For each connection, update its path and total distance from
-            # starting city if the total distance is less than the current distance
-            # in dist list, and add distance to the list of distances
+            # update path and distance if it's smaller and append to distance list
             for (node, weight) in connections:
                 tot_dist = weight + min_dist
                 if tot_dist < dist[node.index]:
